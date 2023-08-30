@@ -1,7 +1,7 @@
 import React,{ useState, useEffect} from "react";
 import ListingCard from "./ListingCard";
 const API = 'http://localhost:6001/listings'
-function ListingsContainer() {
+function ListingsContainer({search}) {
   //create state using terminology that is relevent to the problem
   const [listings, setListings]=useState([])//here we use an empty array to fetch the data
   
@@ -11,8 +11,13 @@ function ListingsContainer() {
   .then(r=>r.json())
   .then(data=>setListings(data))
   },[])
-  //after the data is fetched create a .map to display the array items using a singular listing
-  const listingsCards = listings.map((listing) => {
+  //create a .filter to return the new array thta is not case sensitive by using toLowerCase
+  const filterData=listings.filter((listing) =>{
+    return listing.description.toLowerCase().includes(search.toLowerCase())
+  })
+  console.log(filterData)
+  //after the data is fetched create a .map to display the array items using a singular listing/This will be changed to filterData towards the end to pull from
+  const listingsCards = filterData.map((listing) => {
     //this return is creating multiple listing cards(imported from parent)
      //this directly passes "listing" into the card
     return <ListingCard key={listing.id}listing={listing} deleteById={deleteById}/>
